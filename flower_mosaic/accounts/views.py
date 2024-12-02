@@ -1,4 +1,4 @@
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import Group
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -15,8 +15,10 @@ def register(request):
             clients_group, created = Group.objects.get_or_create(name='Clients')
             user.groups.add(clients_group)
 
-            login(request, user)
-            return redirect('catalog')
+            if user is not None:
+                login(request, user)
+                messages.success(request, "Регистрация успешно завершена!")
+                return redirect('catalog')
     else:
         form = CustomUserRegisterForm()
 
@@ -36,5 +38,6 @@ def user_login(request):
     return render(request, 'accounts/login.html', {'form': form})
 
 
-def client_orders(request):
-    return render(request, 'accounts/client_orders.html')
+def user_logout(request):
+    logout(request)
+    return redirect('catalog')

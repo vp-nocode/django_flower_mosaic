@@ -31,3 +31,55 @@ footer {
    display: block; /* Обеспечивает отступ между меткой и полем ввода */
    margin-bottom: 5px; /* Дополнительный отступ снизу для меток */
 }
+
+.product-quantity {
+   width: 50px;
+ }
+
+#flower-create-order {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+/*
+.product-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.product-item:last-child {
+    border-bottom: none;
+}
+
+.product-item input[type="number"] {
+    width: 50px;
+    margin-left: 10px;
+}
+
+.product-item .item-total {
+    font-weight: bold;
+    margin-left: 10px;
+}
+*/
+
+#total-sum {
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+#order-summary {
+    border-collapse: separate; /* Убедитесь, что используется правильная модель отображения */
+    border-spacing: 2px; /* Отступы между ячейками */
+    width: 100%; /* Делает таблицу адаптивной */
+}
+
+#order-summary th, #order-summary td {
+    padding: 1px; /* Внутренние отступы ячеек */
+    text-align: left; /* Выравнивание текста влево */
+}

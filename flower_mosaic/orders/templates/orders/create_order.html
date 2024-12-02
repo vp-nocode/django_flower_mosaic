@@ -1,0 +1,93 @@
+{% extends 'catalog/layout.html' %}
+
+{% block title %}
+    <title>Создание заказа</title>
+{% endblock %}
+
+{% block content %}
+    <section id="flower-create-order" class="mb-5">
+
+        <h4>Оформление заказа</h4>
+        <hr>
+
+        <form method="post">
+            {% csrf_token %}
+            <div>
+                <label for="address">Адрес доставки:</label>
+                <input type="text" id="address" name="address" value="{{ request.user.address }}">
+            </div>
+            <br>
+            <div>
+                <h4>Выбранные букеты:</h4>
+                <table id="order-summary">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Букет</th>
+                            <th>Цена</th>
+                            <th>Количество</th>
+                            <th>Всего</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for product in products %}
+                        <tr>
+                            <td>
+                                <input type="checkbox" class="product-checkbox" name="products" value="{{ product.id }}" checked>
+                            </td>
+                            <td>{{ product.name }}</td>
+                            <td>{{ product.price }}</td>
+                            <td>
+                                <input type="number" class="product-quantity" name="quantities" min="1" value="1">
+                            </td>
+                            <td><span class="item-total">0</span> руб.</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <p>Общая сумма: <span id="total-sum">0</span> руб.</p>
+            </div>
+            <button type="submit" class="btn btn-primary">Создать заказ</button>
+
+        </form>
+
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const productCheckboxes = document.querySelectorAll('.product-checkbox');
+            const quantities = document.querySelectorAll('.product-quantity');
+            const itemTotals = document.querySelectorAll('.item-total');
+            const totalSumElement = document.getElementById('total-sum');
+
+            function updateTotals() {
+                let totalSum = 0;
+                productCheckboxes.forEach((checkbox, index) => {
+                    if (checkbox.checked) {
+                        const row = checkbox.closest('tr');
+                        const price = parseFloat(row.cells[2].textContent.trim());
+                        const quantity = parseInt(quantities[index].value);
+                        const itemTotal = price * quantity;
+                        itemTotals[index].textContent = itemTotal.toFixed(2);
+                        totalSum += itemTotal;
+                    } else {
+                        itemTotals[index].textContent = '0';
+                    }
+                });
+                totalSumElement.textContent = totalSum.toFixed(2);
+            }
+
+            // Вызов функции для начального подсчета
+            updateTotals();
+
+            productCheckboxes.forEach(checkbox => checkbox.addEventListener('change', updateTotals));
+            quantities.forEach(quantity => quantity.addEventListener('input', updateTotals));
+
+            // Обработчик отправки формы
+            form.addEventListener('submit', function(event) {
+                updateTotals(); // Обновление сумм перед отправкой формы
+            });
+        });
+    </script>
+
+{% endblock %}

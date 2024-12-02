@@ -1,0 +1,32 @@
+{% extends 'catalog/layout.html' %}
+
+{% block title %}
+    <title>Список заказов</title>
+{% endblock %}
+
+{% load order_extras %}
+{% block content %}
+    <section id="orders-list" class="mb-5">
+
+        <h4>Ваши заказы</h4>
+        <hr>
+        {% for order in orders %}
+            <div class="order">
+                <h5>Заказ №{{ order.id }}</h5>
+                <p>Дата заказа: {{ order.order_date|date:"j M Y H:i" }}</p>
+                <p>Статус: {{ order.get_status_display }}</p>
+                <p>Адрес доставки: {{ order.delivery_address }}</p>
+                <ul>
+                    {% for item in order.items.all %}
+                        <li>{{ item.product.name }} - {{ item.quantity }} x {{ item.price }} = {{ item.total_price }} руб.</li>
+                    {% endfor %}
+                </ul>
+                <p>Общая стоимость: {{ order.items.all|sum_total }} руб.</p>
+            </div>
+        {% empty %}
+            <p>У вас нет заказов.</p>
+        {% endfor %}
+
+    </section>
+{% endblock %}
+
