@@ -1,0 +1,36 @@
+{% extends 'catalog/layout.html' %}
+
+{% block title %}
+    <title>Вход в личный кабинет</title>
+{% endblock %}
+
+{% block content %}
+
+    <main>
+        <h4 class="mb-3">Вход в личный кабинет</h4>
+        <hr>
+
+        <form method="post">
+           {% csrf_token %}
+
+           {{ form.non_field_errors }}
+           {% for field in form %}
+               <div class="form-group">
+                   {{ field.label_tag }}
+                   {{ field }}
+                   {% if field.errors %}
+                       <div class="text-danger">
+                           {{ field.errors }}
+                       </div>
+                   {% endif %}
+               </div>
+           {% endfor %}
+
+            <button type="submit" class="btn btn-primary">Войти</button>
+        </form>
+
+        <br>
+        <p>Нет аккаунта? <a href="{% url 'register' %}">Зарегистрироваться</a></p>
+    </main>
+
+{% endblock %}

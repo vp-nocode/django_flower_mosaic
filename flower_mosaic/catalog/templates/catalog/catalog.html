@@ -1,0 +1,48 @@
+{% extends 'catalog/layout.html' %}
+
+{% block title %}
+    <title>Flower Catalogue</title>
+{% endblock %}
+<h1>Flower Catalogue</h1>
+
+{% block content %}
+<section id="flower-catalog" class="mb-5">
+{% if products %}
+    <div class="row">
+        {% for product in products %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="{{ product.image.url }}" class="card-img-top" alt="Card image 1">
+                    <div class="card-body">
+                        <h4 class="card-title">{{ product.name }}</h4>
+                        <p class="card-text"><strong>Цена:</strong> {{ product.price }} руб.</p>
+
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <h4 class="text-center">Каталог букетов в процессе наполнения ...</h4>
+{% endif %}
+</section>
+<!--
+<script>
+    function toggleReviews(movieId, showReviews) {
+      var reviewsDiv = document.getElementById('reviews-' + movieId);
+      var viewButton = document.getElementById('view-btn-' + movieId);
+      var hideButton = document.getElementById('hide-btn-' + movieId);
+
+      if (showReviews) {
+          reviewsDiv.style.display = 'block';
+          viewButton.style.display = 'none';
+          hideButton.style.display = 'inline';
+      } else {
+          reviewsDiv.style.display = 'none';
+          viewButton.style.display = 'inline';
+          hideButton.style.display = 'none';
+      }
+    }
+</script>
+-->
+{% endblock %}

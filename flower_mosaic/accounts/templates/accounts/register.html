@@ -1,0 +1,35 @@
+{% extends 'catalog/layout.html' %}
+
+{% block title %}
+    <title>Регистрация на сайте цветочной студии "Мозаика"</title>
+{% endblock %}
+
+{% block content %}
+
+    <main>
+        <h4 class="mb-3">Регистрация</h4>
+        <hr>
+
+        <form method="post">
+           {% csrf_token %}
+           {{ form.non_field_errors }}
+           {% for field in form %}
+               <div class="form-group">
+                   {{ field.label_tag }}
+                   {{ field }}
+                   {% if field.errors %}
+                       <div class="text-danger">
+                           {{ field.errors }}
+                       </div>
+                   {% endif %}
+               </div>
+           {% endfor %}
+           <button type="submit" class="btn btn-primary">Зарегистрировать</button>
+        </form>
+
+        <br>
+        <p>Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a></p>
+
+    </main>
+
+{% endblock %}

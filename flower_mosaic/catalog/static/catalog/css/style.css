@@ -1,0 +1,33 @@
+/* Темные стили для header и footer */
+.navbar-dark {
+    background-color: #343a40;
+    color: white;
+    padding: 10px 0;
+}
+footer {
+    background-color: #343a40;
+    color: white;
+    padding: 10px 0;
+}
+/* Темный фон для карточек */
+.card {
+    background-color: #f8f9fa;
+}
+/* Темный фон для вложенных карточек */
+.card .card {
+    background-color: #e9ecef;
+}
+
+.text-danger {
+       color: red;
+       margin-top: 5px; /* Отступ сверху для сообщений об ошибках */
+}
+
+.form-group {
+   margin-bottom: 15px; /* Отступ снизу для каждого поля */
+}
+
+.form-group label {
+   display: block; /* Обеспечивает отступ между меткой и полем ввода */
+   margin-bottom: 5px; /* Дополнительный отступ снизу для меток */
+}

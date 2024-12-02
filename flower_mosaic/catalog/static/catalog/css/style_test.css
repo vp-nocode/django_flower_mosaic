@@ -1,0 +1,27 @@
+/* Темные стили для header и footer */
+.navbar {
+    background-color: #ffe2d0;
+    /*color: #ff8574;
+    color: #966100;*/
+    padding: 10px 0;
+}
+
+footer {
+    background-color: #ffe2d0;
+    /*color: #ff8574;
+    color: #966100;*/
+    padding: 10px 10px;
+}
+
+body {
+    background-color: #fff9c4; /*#F5F5DC; #fefff1; */
+}
+
+/* Темный фон для карточек */
+.card {
+    background-color: #f8f9fa;
+}
+/* Темный фон для вложенных карточек */
+.card .card {
+    background-color: #e9ecef;
+}
