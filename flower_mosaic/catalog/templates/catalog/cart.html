@@ -1,0 +1,44 @@
+{% extends 'catalog/layout.html' %}
+
+{% block title %}
+    <title>Корзина</title>
+{% endblock %}
+
+{% block content %}
+<section id="cart" class="mb-5">
+    <h2>Корзина</h2>
+    <div id="cart-contents"></div>
+    <form method="post" action="{% url 'create_order' %}" onsubmit="return sendCart();">
+        {% csrf_token %}
+        <input type="hidden" name="cart" id="cart-input">
+        <input type="text" name="address" placeholder="Адрес доставки" required>
+        <button type="submit" class="btn btn-success mt-3">Оформить заказ</button>
+    </form>
+    <a href="{% url 'catalog' %}" class="btn btn-secondary mt-4">Вернуться в каталог</a>
+</section>
+
+<script>
+     function displayCart() {
+        let cart = JSON.parse(localStorage.getItem('cart')) || {};
+        let cartDiv = document.getElementById('cart-contents');
+        cartDiv.innerHTML = '';
+
+        for (let bouquetId in cart) {
+            let count = cart[bouquetId];
+            cartDiv.innerHTML += `<p>Букет ID: ${bouquetId}, Количество: ${count}</p>`;
+        }
+    }
+
+    function sendCart() {
+        console.log("Form submission event triggered");
+        let cart = localStorage.getItem('cart');
+        console.log("Cart before submission:", cart);
+        document.getElementById('cart-input').value = cart;
+        // Optionally clear the cart from localStorage upon submission
+        localStorage.removeItem('cart');
+    };
+
+    window.onload = displayCart;
+</script>
+
+{% endblock %}

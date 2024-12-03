@@ -11,11 +11,11 @@
         {% for product in products %}
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
-                    <img src="{{ product.image.url }}" class="card-img-top" alt="Card image 1">
+                    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
                     <div class="card-body">
                         <h4 class="card-title">{{ product.name }}</h4>
                         <p class="card-text"><strong>Цена:</strong> {{ product.price }} руб.</p>
-
+                        <button class="btn btn-primary" onclick="addToCart({{ product.id }})">Добавить в корзину</button>
                     </div>
                 </div>
             </div>
@@ -24,7 +24,9 @@
 {% else %}
     <h4 class="text-center">Каталог букетов в процессе наполнения ...</h4>
 {% endif %}
+    <a href="{% url 'cart' %}" class="btn btn-secondary mt-4">Перейти в корзину</a>
 </section>
+
 <!--
 <script>
     function toggleReviews(movieId, showReviews) {
@@ -44,4 +46,14 @@
     }
 </script>
 -->
+
+<script>
+    function addToCart(bouquetId) {
+        let cart = JSON.parse(localStorage.getItem('cart')) || {};
+        cart[bouquetId] = (cart[bouquetId] || 0) + 1;
+        localStorage.setItem('cart', JSON.stringify(cart));
+        // displayCart(); // обновляем интерфейс корзины
+    }
+</script>
+
 {% endblock %}

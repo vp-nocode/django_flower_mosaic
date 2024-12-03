@@ -88,6 +88,31 @@
                 updateTotals(); // Обновление сумм перед отправкой формы
             });
         });
+
+        function displayCart() {
+            let cart = JSON.parse(localStorage.getItem('cart')) || {};
+            let cartDiv = document.getElementById('cart');
+            cartDiv.innerHTML = '';
+
+            for (let bouquetId in cart) {
+                let count = cart[bouquetId];
+                cartDiv.innerHTML += `<p>Букет ID: ${bouquetId}, Количество: ${count}</p>`;
+            }
+        }
+
+        function placeOrder() {
+            // Здесь можно добавить логику для отправки заказа на сервер
+            localStorage.removeItem('cart');
+            alert('Заказ оформлен!');
+            displayCart();
+        }
+
+        // Вызовите displayCart при загрузке страницы
+        window.onload = displayCart;
+
+        document.querySelector('form').onsubmit = function() {
+            localStorage.removeItem('cart');
+        };
     </script>
 
 {% endblock %}
