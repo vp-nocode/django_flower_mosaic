@@ -18,20 +18,22 @@
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
+        <div class="container d-flex justify-content-center">
             <div class="collapse navbar-collapse">
-                <ul class="navbar-nav ml-auto">
+                <!--<ul class="navbar-nav ml-auto"> -->
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="/">Цветочные букеты</a>
                     </li>
-                    <li class="nav-item">
-                          <form class="d-flex" role="search">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                            <button class="btn btn-outline-success" type="submit">Search</button>
-                          </form>
-                    </li>
-                    <!-- Если пользователь авторизован -->
+                </ul>
 
+                <form class="d-flex mx-auto" role="search">
+                    <input class="form-control me-auto" type="search" placeholder="Search" aria-label="Search" id="searchInput">
+                    <button class="btn btn-outline-success" type="submit" onclick="filterCards()">Search</button>
+                </form>
+
+                <ul class="navbar-nav ms-auto">
+                    <!-- Если пользователь авторизован -->
                     {% if user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'order_list' %}">Ваши заказы</a>
