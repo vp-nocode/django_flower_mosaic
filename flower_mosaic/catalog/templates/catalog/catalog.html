@@ -29,8 +29,7 @@
     <h4 class="text-center">Каталог букетов в процессе наполнения ...</h4>
 {% endif %}
 
-    <!--<a href="{% url 'cart' %}" class="btn btn-secondary mt-4">Перейти в корзину</a> -->
-</section>
+ </section>
 
 <!--
 <script>
@@ -53,12 +52,6 @@
 -->
 
 <script>
-    // function addToCart(bouquetId) {
-    //    let cart = JSON.parse(localStorage.getItem('cart')) || {};
-    //    cart[bouquetId] = (cart[bouquetId] || 0) + 1;
-    //    localStorage.setItem('cart', JSON.stringify(cart));
-    //    // displayCart(); // обновляем интерфейс корзины
-    //}
 
     function addToCart(bouquetId, buttonElement) {
         fetch(`/add_to_cart/${bouquetId}/`, {

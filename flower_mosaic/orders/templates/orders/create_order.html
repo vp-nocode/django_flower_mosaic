@@ -56,6 +56,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form'); <!-- * -->
             const productCheckboxes = document.querySelectorAll('.product-checkbox');
             const quantities = document.querySelectorAll('.product-quantity');
             const itemTotals = document.querySelectorAll('.item-total');
@@ -88,32 +89,31 @@
             form.addEventListener('submit', function(event) {
                 updateTotals(); // Обновление сумм перед отправкой формы
             });
+
+            <!-- * -->
+            quantities.forEach(input => {
+            input.addEventListener('change', function() {
+                const productId = this.closest('tr').querySelector('.product-checkbox').value;
+                const quantity = this.value;
+
+                fetch('/orders/update_cart/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({ product_id: productId, quantity: quantity })
+                })
+                .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            console.log('Cart updated successfully');
+                        }
+                    });
+                });
+            });
         });
 
-        function displayCart() {
-            let cart = JSON.parse(localStorage.getItem('cart')) || {};
-            let cartDiv = document.getElementById('cart');
-            cartDiv.innerHTML = '';
-
-            for (let bouquetId in cart) {
-                let count = cart[bouquetId];
-                cartDiv.innerHTML += `<p>Букет ID: ${bouquetId}, Количество: ${count}</p>`;
-            }
-        }
-
-        function placeOrder() {
-            // Здесь можно добавить логику для отправки заказа на сервер
-            localStorage.removeItem('cart');
-            alert('Заказ оформлен!');
-            displayCart();
-        }
-
-        // Вызовите displayCart при загрузке страницы
-        window.onload = displayCart;
-
-        document.querySelector('form').onsubmit = function() {
-            localStorage.removeItem('cart');
-        };
     </script>
 
 {% endblock %}

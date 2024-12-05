@@ -1,10 +1,11 @@
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from .models import Order, OrderItem
 from catalog.models import Product
 from django.contrib.auth.decorators import login_required
-
+from django.views.decorators.http import require_POST
+import json
 
 @login_required
 def create_order(request):
@@ -12,6 +13,7 @@ def create_order(request):
     if request.method == 'POST':
 
         cart = request.session.get('cart', {})
+        print(f'cart: {cart}')
         if not cart:
             return redirect(reverse('create_order'))
 
@@ -20,6 +22,7 @@ def create_order(request):
 
         for bouquet_id, quantity in cart.items():
             product = Product.objects.get(id=bouquet_id)
+            print(f'product: {product}')
             OrderItem.objects.create(
                 order=order,
                 product=product,
@@ -49,61 +52,26 @@ def create_order(request):
         return render(request, 'orders/create_order.html', {'products': products})
 
 
-# @login_required
-# def create_order(request):
-#     if request.method == 'POST':
-#         cart_json = request.POST.get('cart', '{}')  # Используйте '{}' как значение по умолчанию
-#         try:
-#             cart = json.loads(cart_json)
-#         except json.JSONDecodeError:
-#             return HttpResponseBadRequest("Invalid cart data")
-#         address = request.POST.get('address')
-#         order = Order.objects.create(user=request.user, delivery_address=address)
-#
-#         for bouquet_id, quantity in cart.items():
-#             product = Product.objects.get(id=bouquet_id)
-#             OrderItem.objects.create(
-#                 order=order,
-#                 product=product,
-#                 quantity=quantity,
-#                 price=product.price
-#             )
-#
-#         # Очистка корзины после создания заказа
-#         # request.POST['cart'] = '{}'
-#         return redirect(reverse('order_list'))
-#
-#     else:
-#         # return render(request, 'orders/create_order.html')
-#         return HttpResponseBadRequest("This view only handles POST requests.")
-
-# @login_required
-# def create_order(request):
-#     if request.method == 'POST':
-#         product_ids = request.POST.getlist('products')
-#         quantities = request.POST.getlist('quantities')
-#         products = Product.objects.filter(id__in=product_ids)
-#         # address = request.user.address
-#         address = request.POST.get('address')
-#         order = Order.objects.create(user=request.user, delivery_address=address)
-#
-#         for product, quantity in zip(products, quantities):
-#             OrderItem.objects.create(
-#                 order=order,
-#                 product=product,
-#                 quantity=int(quantity),
-#                 price=product.price
-#             )
-#
-#         return redirect(reverse('order_list'))
-#     else:
-#         # products = Product.objects.all()
-#         # return render(request, 'orders/create_order.html', {'products': products})
-#         return render(request, 'orders/create_order.html')
-#
-
-
-
 def order_list(request):
     orders = Order.objects.filter(user=request.user)
     return render(request, 'orders/order_list.html', {'orders': orders})
+
+
+@require_POST
+def update_cart(request):
+    data = json.loads(request.body)
+    print(f'data: {data}')
+    product_id = str(data.get('product_id'))
+    quantity = int(data.get('quantity'))
+
+    cart = request.session.get('cart', {})
+    print(f'before cart: {cart}')
+    if quantity > 0:
+        cart[product_id] = quantity
+    else:
+        cart.pop(product_id, None)  # Удалить товар, если количество равно 0
+
+    print(f'after cart: {cart}')
+    request.session['cart'] = cart
+
+    return JsonResponse({'success': True})
