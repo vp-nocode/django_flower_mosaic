@@ -7,6 +7,9 @@ load_dotenv()
 TOKEN = os.getenv('TGB_TOKEN')
 bot = telebot.TeleBot(TOKEN)
 
+# Настройка прокси для бота
+telebot.apihelper.proxy = {'http': 'http://proxy.server:3128', 'https': 'https://proxy.server:3128'}
+
 DJANGO_API_URL = 'http://digidobu.beget.tech/api/order_status/'
 
 def create_main_menu():
@@ -61,14 +64,20 @@ def check_order_status(message):
     check_order_status_by_id(message, order_id)
 
 def check_order_status_by_id(message, order_id):
-    response = requests.get(f"{DJANGO_API_URL}{order_id}/")
+    # Настройка прокси для HTTP-запросов
+    proxies = {
+        'http': 'http://proxy.server:3128',
+        'https': 'https://proxy.server:3128'
+    }
+    response = requests.get(f"{DJANGO_API_URL}{order_id}/", proxies=proxies)
+
     if response.status_code == 200:
         order_info = response.json()
         bot.send_message(message.chat.id,
                          f"Заказ №{order_info['id']}:\nСтатус: {order_info['status']}\nАдрес доставки: {order_info['delivery_address']}")
 
         for item in order_info['items']:
-            image_url = f"http://digidobu.beget.tech/flower_mosaic/media/{item['image']}"  # Предполагается, что изображения хранятся в этой директории
+            image_url = f"http://digidobu.beget.tech/flower_mosaic/media/{item['image']}"
             try:
                 bot.send_photo(message.chat.id, image_url,
                                caption=f"{item['product_name']}: {item['quantity']} шт. по {item['price']} руб.")
